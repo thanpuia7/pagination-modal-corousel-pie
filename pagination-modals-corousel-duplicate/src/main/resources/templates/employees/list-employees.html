@@ -1,0 +1,298 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+   <!-- Bootstrap -->
+	
+ <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    
+     <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <script th:src="@{/js/jquery.js}"></script>
+    <script th:src="@{/js/bootstrap.js}"></script>
+    <script type="text/javascript" th:src="@{/js/main.js}"  src="/js/main.js"></script>
+   
+    <script type="text/javascript">
+window.onload = function() {
+
+var options = {
+	title: {
+		text: "Website Traffic Source"
+	},
+	data: [{
+			type: "pie",
+			startAngle: 45,
+			showInLegend: "true",
+			legendText: "{label}",
+			indexLabel: "{label} ({y})",
+			yValueFormatString:"#,##0.#"%"",
+			dataPoints: [
+				{ label: "Tha Ka ti", y: 36 },
+				{ label: "Tha ka ti lo", y: 31 },
+				{ label: "Ngaihdan ka nei lo", y: 7 },
+				{ label: "Tha khep khep ve", y: 7 },
+				{ label: "Tha lo khep khep ve", y: 6 },
+				{ label: "A lo nih tak chu", y: 10 },
+				{ label: "Amen", y: 3 }
+			]
+	}]
+};
+$("#chartContainer").CanvasJSChart(options);
+
+}
+</script>
+	<title>Employee Directory</title>
+	
+</head>
+
+<body>
+
+
+<nav class="navbar .navbar-inverse">
+<div class="container ">
+<div class="nav-header">
+	<div class="navbar-brand">Employee Information</div>
+</div>
+	<ul class="nav navbar-nav">
+	<li> <a href="#">Home</a></li>
+	<li><a href=" ">About</a></li>
+	<li><a href=" ">FAQ </a></li>
+	</ul>
+</div>
+	</nav>
+
+<div class="container  bg-dark">
+<div>
+	<h3>Employee Directory</h3>
+	<hr>
+	
+	<!-- Add a button -->
+	<a th:href="@{/employees/showFormForAdd}"
+		class="btn btn-primary btn-sm mb-3">
+		Add Employee
+	</a>
+	
+	
+	<table class="table table-bordered table-striped">
+		<thead class="thead-dark">
+			<tr>
+				<th>ID</th>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Email</th>
+				<th>Button</th>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<tr th:each="tempEmployee : ${employees}">
+				
+				<td th:text="${tempEmployee.id}" />
+				<td th:text="${tempEmployee.firstName}" />	
+				<td th:text="${tempEmployee.lastName}" />	
+				<td th:text="${tempEmployee.email}" />	
+				<td><a th:href="@{/employees/findOne/(id=${tempEmployee.id})}" class="btn btn-primary eBtn">Edit</a>
+					<a th:href=" @{/employees/delete/(id=${tempEmployee.id})}" class="btn btn-danger dBtn">Delete</a> 
+				</td>
+				
+			</tr>
+		</tbody>	
+		
+  			
+	</table>
+
+            <ul class="nav nav-pills" >
+	
+			<li class="nav-item" th:each="i : ${#numbers.sequence(0,employees.totalPages-1)}">
+	
+			<a th:href="@{/employees/list/(page=${i})}" th:text="${i}" class="nav-link"
+			
+			th:classappend="${currentPage}==${i}? 'active':''"></a>
+	
+			 </li>
+	
+			</ul>	
+
+</div>	
+
+<div class="myForm">
+	<form th:action="@{/employees/save}"  method="post">
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       
+          <div class="form-group">
+            <label for="id" class="col-form-label">ID</label>
+            <input type="text" class="form-control" id="id" name="id" value=" " />
+          </div>
+          
+          <div class="form-group">
+            <label for="fisrtName" class="col-form-label">Fist Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" value=" " />
+          </div>
+          
+          <div class="form-group">
+            <label for="lastName" class="col-form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" value=" " />
+          </div>
+          
+          <div class="form-group">
+            <label for="email" class="col-form-label">Email</label>
+            <input type="text" class="form-control" id="email" name="email" value=" " />
+          </div>
+          
+          
+     
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" value="save" />
+      </div>
+    </div>
+  </div>
+</div>
+
+</form>
+</div>
+	
+
+
+<div class="myform">
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Alert!!!!!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="alert alert-danger">Are you sure you want to delete</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <a href=" " class="btn btn-danger" id="delRef">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+	
+
+	
+	
+	<hr/>
+	<hr/>
+	
+	<div class="container-fluid">
+  <h1>MLA LAD HNUAIA STEP SIAM 
+  </h1>
+<h3>Name of work: Construction of Drain Cover Hand railing chequered</h3> 
+<h3>Sanction Amount: Rs 500000</h3>
+<h3>Implementing Agency:MHIP Hunter Branch </h3>
+<h3>YEAR OF CONSTRUCTION 2018-2019</h3>
+  <div id="jsaAboutCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#jsaAboutCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#jsaAboutCarousel" data-slide-to="1"></li>
+      <li data-target="#jsaAboutCarousel" data-slide-to="2"></li>
+      <li data-target="#jsaAboutCarousel" data-slide-to="3"></li>
+    </ol>
+ 
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+ 
+	  <div class="item active">
+        <img th:src="@{/images/slider-e.jpg}" alt="JSA-About" style="width:70%;" />
+        <div class="carousel-caption">
+          <h3>Step Siam</h3>
+        </div>
+      </div>
+    
+      <div class="item">
+        <img th:src="@{/images/slider-b.jpg}" alt="JSA-About" style="width:70%;" />
+        <div class="carousel-caption">
+          <h3>STEP</h3>
+        </div>
+      </div>
+ 
+      <div class="item">
+        <img th:src="@{/images/slider-c.jpg}" alt="JSA-About" style="width:70%;" />
+        <div class="carousel-caption">
+          <h3>A KAWI LAI</h3>
+        </div>
+      </div>
+  
+  	<div class="item">
+        <img th:src="@{/images/slider-d.jpg}" alt="JSA-About" style="width:70%;" />
+        <div class="carousel-caption">
+          <h3>PWD ROAD</h3>
+        </div>
+      </div>
+      
+      
+    </div>
+ 
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#jsaAboutCarousel" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#jsaAboutCarousel" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>
+ 
+
+      
+      
+      
+      
+   <hr/>
+   
+   <div class="p-3 mb-2 bg-dark text-white">
+   
+       <h3>He step siam hi tha i ti em?</h3><br>
+        
+ <div class="radio" >    
+  <label><input type="radio" name="optradio" checked>Tha ti</label>
+</div>
+<div class="radio">
+  <label><input type="radio" name="optradio">Tha ti lo</label>
+</div>
+<div class="radio disabled">
+  <label><input type="radio" name="optradio">Ngaihdan ka nei lo</label>
+</div>
+</div>
+
+<hr> 
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+<script type="text/javascript" th:src="@{https://canvasjs.com/assets/script/jquery-1.11.1.min.js}"></script>  
+<script type="text/javascript" th:src="@{https://canvasjs.com/assets/script/jquery.canvasjs.min.js}"></script>
+
+</div>
+   
+</body>
+</html>
+
+
+
